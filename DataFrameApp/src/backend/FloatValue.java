@@ -21,6 +21,10 @@ public class FloatValue extends Value {
         val = Float.parseFloat(valToBe);
     }
 
+    public FloatValue(){
+        val = new Float(0);
+    }
+
     @Override
     public Object get() {
         return val;

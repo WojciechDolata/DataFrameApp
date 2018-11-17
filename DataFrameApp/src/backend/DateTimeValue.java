@@ -25,6 +25,10 @@ public class DateTimeValue extends Value {
 
     }
 
+    public DateTimeValue(){
+        val = null;
+    }
+
     public DateTimeValue(GregorianCalendar other){
         val = other;
     }

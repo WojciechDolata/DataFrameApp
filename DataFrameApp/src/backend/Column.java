@@ -155,6 +155,72 @@ public class Column implements Cloneable{
         return returnable;
     }
 
+    private Value createValObj(String s){
+        Value returnable;
+        if(s.equals("backend.IntegerValue")){
+            returnable = new IntegerValue();
+        }
+        else if(s.equals("backend.FloatValue")){
+            returnable = new FloatValue("1.0");
+        }
+        else if(s.equals("backend.DoubleValue")){
+            returnable = new DoubleValue("1.0");
+        }
+        else {
+            returnable = new IntegerValue();
+        }
+
+        return returnable;
+    }
+
+    public Value min(){
+
+        Value returnable = createValObj(type.getName());
+        for(Value curObj: obj){
+            if(curObj.lte(returnable)){
+                returnable = curObj;
+            }
+        }
+
+        return returnable;
+    }
+
+    public Value max(){
+
+        Value returnable = createValObj(type.getName());
+        for(Value curObj: obj){
+            if(curObj.gte(returnable)){
+                returnable = curObj;
+            }
+        }
+
+        return returnable;
+    }
+
+    public Value sum(){
+
+        Value returnable = createValObj(type.getName());
+        returnable.set("0");
+        for(Value curObj: obj){
+            System.out.println(returnable);
+            returnable = returnable.add(curObj);
+        }
+        System.out.println(returnable);
+        return returnable;
+    }
+
+    public Value std(){
+
+        Value returnable = createValObj(type.getName());
+        for(Value curObj: obj){
+            if(curObj.lte(returnable)){
+                returnable = curObj;
+            }
+        }
+
+        return returnable;
+    }
+
     public Column(String nameToBe, Class<? extends Value> dataType) {
         this.name = nameToBe;
         this.type = dataType;

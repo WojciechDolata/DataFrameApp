@@ -11,7 +11,7 @@ import java.util.*;
 public class DataFrame{
 
     public class DFGroup implements Groupby{
-        DataFrame frame;
+        public DataFrame frame;
         String [] colToSort;
         LinkedList<DataFrame> separatedDFs;
         DFGroup(String[] kolumny, ArrayList<Class<? extends Value>> typy, String[] colnames){
