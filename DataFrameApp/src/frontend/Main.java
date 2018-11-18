@@ -48,33 +48,34 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         scene = new Scene(new Group());
-        //Text text = new Text();
-        //text.setFont(new Font(45));
-        //Parent root = FXMLLoader.load(getClass().getResource("frontend.fxml"));
-        //StackPane root = new StackPane();
 
-
-        primaryStage.setTitle("DF");
+        primaryStage.setTitle("DFApplication");
 
         Group root = new Group();
 
         Button fileButton = new Button("File...");
         fileButton.setOnAction((event) -> {
+
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             Main.selectedFile = fileChooser.showOpenDialog(Main.stage);
-            ArrayList<Class<? extends Value>> typy2 = new ArrayList<>();
-            typy2.add(new StringValue("s").getClass());
-            typy2.add(new StringValue("1999-01-01").getClass());
-            typy2.add(new FloatValue(0.1).getClass());
-            typy2.add(new DoubleValue(1.0).getClass());
             DataFrame tmpDF = null;
+            DataFrame tdf = new DataFrame();
             try {
-                tmpDF = new DataFrame(Main.selectedFile.getAbsolutePath(), typy2, true);
+                tmpDF = new DataFrame(Main.selectedFile.getAbsolutePath(), tdf.typeFromFile(Main.selectedFile.getAbsolutePath()), true);
             }
             catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("File Error");
+                alert.setContentText("Error encountered while opening file.");
+
+                alert.showAndWait();
             }
             df = tmpDF;
+            for (Class<? extends Value> a : tdf.typeFromFile(Main.selectedFile.getAbsolutePath())){
+                System.out.println(a.getName());
+            }
             table = tmpDF.makeTableView();
             String [] ss = new String[0];
             dfGroup = df.groupby(ss);

@@ -10,6 +10,65 @@ import java.util.*;
 
 public class DataFrame{
 
+    public Value createValObj(String s){
+        Value returnable;
+        if(s.equals("backend.IntegerValue")){
+            returnable = new IntegerValue();
+        }
+        else if(s.equals("backend.FloatValue")){
+            returnable = new FloatValue("1.0");
+        }
+        else if(s.equals("backend.DoubleValue")){
+            returnable = new DoubleValue("1.0");
+        }
+        else if(s.equals("backend.DateTimeValue")){
+            returnable = new DateTimeValue();
+        }
+        else if(s.equals("backend.StringValue")){
+            returnable = new StringValue();
+        }
+        else {
+            returnable = new IntegerValue();
+        }
+
+        return returnable;
+    }
+
+    public ArrayList<Class<? extends Value>> typeFromFile(String path){
+        ArrayList<Class<? extends Value>> returnable = new ArrayList<>();
+        try {
+            FileInputStream fstream = new FileInputStream(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+            String strLine;
+            strLine = br.readLine();
+            strLine = br.readLine();
+            String[] currentItem = strLine.split("[,]");
+            for(String element: currentItem){
+                if (element.contains(".")){
+                    returnable.add(createValObj("backend.DoubleValue").getClass());
+                }
+                else if (element.contains("-")){
+                    returnable.add(createValObj("backend.DateTimeValue").getClass());
+                }
+                else if (element.matches("[0-9]+")){
+                    returnable.add(createValObj("backend.IntegerValue").getClass());
+                }
+                else{
+                    returnable.add(createValObj("backend.StringValue").getClass());
+                }
+            }
+
+            br.close();
+        }
+        catch (Exception e){
+            System.out.println("Wrong file path!");
+        }
+
+
+        return returnable;
+    }
+
     public class DFGroup implements Groupby{
         public DataFrame frame;
         String [] colToSort;
@@ -21,7 +80,7 @@ public class DataFrame{
 
 
 
-        private Value createValObj(String s){
+        public Value createValObj(String s){
             Value returnable;
             if(s.equals("backend.IntegerValue")){
                 returnable = new IntegerValue();
