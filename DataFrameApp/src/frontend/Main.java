@@ -76,7 +76,6 @@ public class Main extends Application {
             }
             df = tmpDF;
             table = tmpDF.makeTableView();
-            System.out.println(table.getItems().get(0).get(0));
             String [] ss = new String[0];
             dfGroup = df.groupby(ss);
         });
@@ -129,23 +128,30 @@ public class Main extends Application {
         chartButton.setLayoutX(470);
         chartButton.setLayoutY(110);
         chartButton.setOnAction((event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText("Column Error");
             try{
+                chartDF.getData().clear();
                 Column columnY = df.get(colYNameField.getText());
                 Column columnX = df.get(colXNameField.getText());
+                xAxis.setLabel(columnX.name);
+                yAxis.setLabel(columnY.name);
                 XYChart.Series series = new XYChart.Series();
-                for(int i = 0; i< column.obj.size(); i++){
+                for(int i = 0; i< columnY.obj.size(); i++){
                     series.getData().add(new XYChart.Data(Double.parseDouble(columnX.obj.get(i).toString()),Double.parseDouble(columnY.obj.get(i).toString() )));
                 }
                 chartDF.getData().add(series);
             }
             catch (NumberFormatException e){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("Column Error");
                 alert.setContentText("Wrong data type, could not draw chart!");
-
                 alert.showAndWait();
                 System.out.println("Wrong data type! (chart)");
+            }
+            catch (NullPointerException e){
+                alert.setContentText("Wrong column(s)!");
+                alert.showAndWait();
+                System.out.println("Wrong column name!");
             }
         }));
         root.getChildren().add(chartButton);
@@ -250,7 +256,6 @@ public class Main extends Application {
                     std.setText("0");
                     var.setText("0");
                     System.out.println("Wrong data type! (std, var)");
-                    System.out.println(alert2);
                 }
 
             }
