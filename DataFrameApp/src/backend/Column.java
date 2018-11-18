@@ -202,23 +202,46 @@ public class Column implements Cloneable{
         Value returnable = createValObj(type.getName());
         returnable.set("0");
         for(Value curObj: obj){
-            System.out.println(returnable);
             returnable = returnable.add(curObj);
         }
-        System.out.println(returnable);
+        return returnable;
+    }
+
+
+    public Value mean(){
+
+        Value returnable = sum();
+        Value helper = createValObj(type.getName());
+        helper.set(((Integer) obj.size()).toString());
+        returnable = returnable.div(helper);
+
         return returnable;
     }
 
     public Value std(){
 
         Value returnable = createValObj(type.getName());
+        Value helper = createValObj(type.getName());
+        helper.set("2");
+        Value myMean = mean();
         for(Value curObj: obj){
-            if(curObj.lte(returnable)){
-                returnable = curObj;
-            }
+            returnable = returnable.add(curObj.sub(myMean).pow(helper));
         }
+        helper.set(((Integer) obj.size()).toString());
+        returnable = returnable.div(helper);
+        helper.set("0.5");
+        returnable = returnable.pow(helper);
 
         return returnable;
+    }
+
+    public Value var(){
+
+        Value returnable = std();
+        Value helper = createValObj(type.getName());
+        helper.set("2");
+
+        return returnable.pow(helper);
     }
 
     public Column(String nameToBe, Class<? extends Value> dataType) {
