@@ -82,7 +82,8 @@ public class Main extends Application {
         });
 
         fileButton.setLayoutX(500);
-        fileButton.setLayoutY(375);
+        fileButton.setLayoutY(420);
+        fileButton.setPrefSize(50.0, 50.0);
         root.getChildren().add(fileButton);
 
         Button printTable = new Button("Print.");
@@ -93,70 +94,28 @@ public class Main extends Application {
             System.out.println(table.getItems().get(0).get(2).getClass().toString());
         });
 
-        printTable.setLayoutX(500);
-        printTable.setLayoutY(350);
+        printTable.setLayoutX(600);
+        printTable.setLayoutY(470);
         root.getChildren().add(printTable);
 
-        TextField min = new TextField();
-        min.setLayoutX(400);
-        min.setLayoutY(200);
-        root.getChildren().add(min);
-        Text minT = new Text();
-        minT.setText("Minimum: ");
-        minT.setX(335);
-        minT.setY(215);
-        root.getChildren().add(minT);
+        Text chartT = new Text();
+        chartT.setText("Chart: ");
+        chartT.setFont(new Font(20.0));
+        chartT.setX(400);
+        chartT.setY(30);
+        root.getChildren().add(chartT);
 
-        TextField max = new TextField();
-        max.setLayoutX(400);
-        max.setLayoutY(225);
-        root.getChildren().add(max);
-        Text maxT = new Text();
-        maxT.setText("Maksimum: ");
-        maxT.setX(335);
-        maxT.setY(240);
-        root.getChildren().add(maxT);
+        TextField colYNameField = new TextField();
+        colYNameField.setLayoutX(400);
+        colYNameField.setLayoutY(50);
+        root.getChildren().add(colYNameField);
+        colYNameField.setText("Column for Y-Axis");
 
-        TextField sum = new TextField();
-        sum.setLayoutX(400);
-        sum.setLayoutY(250);
-        root.getChildren().add(sum);
-        Text sumT = new Text();
-        sumT.setText("Suma: ");
-        sumT.setX(335);
-        sumT.setY(265);
-        root.getChildren().add(sumT);
-
-        TextField std = new TextField();
-        std.setLayoutX(400);
-        std.setLayoutY(275);
-        root.getChildren().add(std);
-        Text stdT = new Text();
-        stdT.setText("Odchylenie: ");
-        stdT.setX(335);
-        stdT.setY(290);
-        root.getChildren().add(stdT);
-
-        TextField var = new TextField();
-        var.setLayoutX(400);
-        var.setLayoutY(300);
-        root.getChildren().add(var);
-        Text varT = new Text();
-        varT.setText("Wariancja: ");
-        varT.setX(335);
-        varT.setY(315);
-        root.getChildren().add(varT);
-
-        TextField colNameField = new TextField();
-        colNameField.setLayoutX(335);
-        colNameField.setLayoutY(150);
-        root.getChildren().add(colNameField);
-        colNameField.setText("Column name");
-        TextField colNameField2 = new TextField();
-        colNameField2.setLayoutX(335);
-        colNameField2.setLayoutY(175);
-        root.getChildren().add(colNameField2);
-        colNameField2.setText("Column name");
+        TextField colXNameField = new TextField();
+        colXNameField.setLayoutX(400);
+        colXNameField.setLayoutY(80);
+        root.getChildren().add(colXNameField);
+        colXNameField.setText("Column for X-Axis");
 
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -166,18 +125,116 @@ public class Main extends Application {
         chartDF.setLayoutY(50);
         root.getChildren().add(chartDF);
 
+        Button chartButton = new Button("Make chart!");
+        chartButton.setLayoutX(470);
+        chartButton.setLayoutY(110);
+        chartButton.setOnAction((event -> {
+            try{
+                Column columnY = df.get(colYNameField.getText());
+                Column columnX = df.get(colXNameField.getText());
+                XYChart.Series series = new XYChart.Series();
+                for(int i = 0; i< column.obj.size(); i++){
+                    series.getData().add(new XYChart.Data(Double.parseDouble(columnX.obj.get(i).toString()),Double.parseDouble(columnY.obj.get(i).toString() )));
+                }
+                chartDF.getData().add(series);
+            }
+            catch (NumberFormatException e){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Column Error");
+                alert.setContentText("Wrong data type, could not draw chart!");
 
-        Button column1 = new Button("Calculate!");
-        column1.setOnAction((event -> {
+                alert.showAndWait();
+                System.out.println("Wrong data type! (chart)");
+            }
+        }));
+        root.getChildren().add(chartButton);
+
+        Text calcT = new Text();
+        calcT.setText("Statistics for column: ");
+        calcT.setFont(new Font(20.0));
+        calcT.setX(370);
+        calcT.setY(190);
+        root.getChildren().add(calcT);
+
+        TextField min = new TextField();
+        min.setLayoutX(400);
+        min.setLayoutY(250);
+        root.getChildren().add(min);
+        Text minT = new Text();
+        minT.setText("Min: ");
+        minT.setX(335);
+        minT.setY(265);
+        root.getChildren().add(minT);
+
+        TextField max = new TextField();
+        max.setLayoutX(400);
+        max.setLayoutY(275);
+        root.getChildren().add(max);
+        Text maxT = new Text();
+        maxT.setText("Max: ");
+        maxT.setX(335);
+        maxT.setY(290);
+        root.getChildren().add(maxT);
+
+        TextField sum = new TextField();
+        sum.setLayoutX(400);
+        sum.setLayoutY(300);
+        root.getChildren().add(sum);
+        Text sumT = new Text();
+        sumT.setText("Sum: ");
+        sumT.setX(335);
+        sumT.setY(315);
+        root.getChildren().add(sumT);
+
+        TextField std = new TextField();
+        std.setLayoutX(400);
+        std.setLayoutY(325);
+        root.getChildren().add(std);
+        Text stdT = new Text();
+        stdT.setText("Std: ");
+        stdT.setX(335);
+        stdT.setY(340);
+        root.getChildren().add(stdT);
+
+        TextField var = new TextField();
+        var.setLayoutX(400);
+        var.setLayoutY(350);
+        root.getChildren().add(var);
+
+        Text varT = new Text();
+        varT.setText("Var: ");
+        varT.setX(335);
+        varT.setY(365);
+        root.getChildren().add(varT);
+
+        Text colToStatsT = new Text();
+        colToStatsT.setFont(new Font(15.0));
+        colToStatsT.setText("Column: ");
+        colToStatsT.setX(335);
+        colToStatsT.setY(210);
+        root.getChildren().add(colToStatsT);
+
+        TextField colNameField = new TextField();
+        colNameField.setLayoutX(335);
+        colNameField.setLayoutY(215);
+        root.getChildren().add(colNameField);
+        colNameField.setText("Column name");
+
+
+        Button calcButton = new Button("Calculate!");
+        calcButton.setOnAction((event -> {
+            boolean alert2 = false;
             try {
                 column = df.get(colNameField.getText());
-                Column columnX = df.get(colNameField2.getText());
+
                 try {
                     min.setText(column.min().toString());
                     max.setText(column.max().toString());
                     sum.setText(column.sum().toString());
                 }
                 catch (ArithmeticException e){
+                    alert2 = true;
                     min.setText("0");
                     max.setText("0");
                     sum.setText("0");
@@ -189,20 +246,13 @@ public class Main extends Application {
 
                 }
                 catch (ArithmeticException e){
+                    alert2 = true;
                     std.setText("0");
                     var.setText("0");
                     System.out.println("Wrong data type! (std, var)");
+                    System.out.println(alert2);
                 }
-                try{
-                    XYChart.Series series = new XYChart.Series();
-                    for(int i = 0; i< column.obj.size(); i++){
-                        series.getData().add(new XYChart.Data(Double.parseDouble(columnX.obj.get(i).toString()),Double.parseDouble(column.obj.get(i).toString() )));
-                    }
-                    chartDF.getData().add(series);
-                }
-                catch (ArithmeticException e){
-                    System.out.println("Wrong data type! (chart)");
-                }
+
             }
             catch (NullPointerException e) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -213,12 +263,20 @@ public class Main extends Application {
                 alert.showAndWait();
                 System.out.println("Wrong column name");
             }
+            System.out.println(alert2);
+            if(alert2){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Column Error");
+                alert.setContentText("Wrong data type, could not perform action!");
 
+                alert.showAndWait();
+            }
 
         }));
-        column1.setLayoutY(150);
-        column1.setLayoutX(470);
-        root.getChildren().add(column1);
+        calcButton.setLayoutY(215);
+        calcButton.setLayoutX(480);
+        root.getChildren().add(calcButton);
 
 
 
