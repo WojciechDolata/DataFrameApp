@@ -65,7 +65,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         scene = new Scene(new Group());
-        connect();
+        //connect();
+        DataFrameDB mojedb = new DataFrameDB("wdolata");
+         df = mojedb.toDF("books");
         primaryStage.setTitle("DFApplication");
 
         Group root = new Group();

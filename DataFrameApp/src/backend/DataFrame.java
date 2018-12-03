@@ -34,6 +34,23 @@ public class DataFrame{
         return returnable;
     }
 
+    public Class<? extends Value> typeFromString(String string){
+        Class<?extends Value> returnable;
+        if (string.contains(".")){
+            returnable = (createValObj("backend.DoubleValue").getClass());
+        }
+        else if (string.contains("-")){
+            returnable = (createValObj("backend.DateTimeValue").getClass());
+        }
+        else if (string.matches("\\d+") && string.length()<10){
+            returnable = (createValObj("backend.IntegerValue").getClass());
+        }
+        else{
+            returnable = (createValObj("backend.StringValue").getClass());
+        }
+        return returnable;
+    }
+
     public ArrayList<Class<? extends Value>> typeFromFile(String path){
         ArrayList<Class<? extends Value>> returnable = new ArrayList<>();
         try {
@@ -45,18 +62,19 @@ public class DataFrame{
             strLine = br.readLine();
             String[] currentItem = strLine.split("[,]");
             for(String element: currentItem){
-                if (element.contains(".")){
-                    returnable.add(createValObj("backend.DoubleValue").getClass());
-                }
-                else if (element.contains("-")){
-                    returnable.add(createValObj("backend.DateTimeValue").getClass());
-                }
-                else if (element.matches("[0-9]+")){
-                    returnable.add(createValObj("backend.IntegerValue").getClass());
-                }
-                else{
-                    returnable.add(createValObj("backend.StringValue").getClass());
-                }
+                returnable.add(typeFromString(element));
+//                if (element.contains(".")){
+//                    returnable.add(createValObj("backend.DoubleValue").getClass());
+//                }
+//                else if (element.contains("-")){
+//                    returnable.add(createValObj("backend.DateTimeValue").getClass());
+//                }
+//                else if (element.matches("[0-9]+")){
+//                    returnable.add(createValObj("backend.IntegerValue").getClass());
+//                }
+//                else{
+//                    returnable.add(createValObj("backend.StringValue").getClass());
+//                }
             }
 
             br.close();
@@ -422,7 +440,6 @@ public class DataFrame{
         while ((strLine) != null)   {
             String[] currentItem = strLine.split("[,]");
             for(int j = 0; j<currentItem.length; j++) {
-
                 table.get(j).obj.add(Value.getInstance(table.get(j).type));
                 table.get(j).obj.get(i).set(currentItem[j]);
             }
