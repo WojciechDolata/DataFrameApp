@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.beans.value.*;
 import javafx.util.*;
+import java.sql.*;
 
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 
 public class Main extends Application {
 
+    private Connection conn = null;
     public static TableView<ArrayList<Value>> table = new TableView<>();
     public static File selectedFile = null;
     public static Stage stage;
@@ -44,11 +46,26 @@ public class Main extends Application {
 
     final HBox hb = new HBox();
 
+    public void connect(){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://mysql.agh.edu.pl/wdolata",
+                            "wdolata","JhDsC5RFxymJpLW6");
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }catch(Exception e){e.printStackTrace();}
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         scene = new Scene(new Group());
-
+        connect();
         primaryStage.setTitle("DFApplication");
 
         Group root = new Group();
