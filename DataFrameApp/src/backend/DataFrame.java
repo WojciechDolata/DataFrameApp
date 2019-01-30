@@ -22,7 +22,7 @@ public class DataFrame{
             returnable = new DoubleValue("1.0");
         }
         else if(s.equals("backend.DateTimeValue")){
-            returnable = new DateTimeValue();
+            returnable = new StringValue();// moglo byc DateTimeValue
         }
         else if(s.equals("backend.StringValue")){
             returnable = new StringValue();
@@ -409,6 +409,7 @@ public class DataFrame{
     
     
     }
+
 
     public DataFrame(String fileName, ArrayList<Class<? extends Value>> typy, boolean header) throws IOException {
         types=typy;
